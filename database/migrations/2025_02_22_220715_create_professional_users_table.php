@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('field'); // Medical field or specialization
             $table->string('phone_number')->unique();
+            $table->integer('grade')->default(0);
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();

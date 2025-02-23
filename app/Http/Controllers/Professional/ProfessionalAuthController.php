@@ -24,6 +24,7 @@ class ProfessionalAuthController extends Controller
             'phone_number' => 'required|string|unique:professional_users',
             'email' => 'required|string|email|unique:professional_users',
             'password' => 'required|string|min:6|confirmed',
+             'grade' => 'nullable|integer|min:0|max:5'
         ]);
 
         if ($validator->fails()) {
@@ -45,6 +46,7 @@ class ProfessionalAuthController extends Controller
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'grade' => $request->grade ?? 0,
             'email_verified_at' => now(),
         ]);
 
@@ -113,19 +115,20 @@ class ProfessionalAuthController extends Controller
      * Get all professionals and their fields
      */
     public function index()
-    {
-        $professionals = ProfessionalUser::select('professional_id', 'name', 'field')->get();
+{
+    $professionals = ProfessionalUser::all(); // Fetch all fields
 
-        if ($professionals->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No professionals found'
-            ], 404);
-        }
-
+    if ($professionals->isEmpty()) {
         return response()->json([
-            'status' => true,
-            'professionals' => $professionals
-        ], 200);
+            'status' => false,
+            'message' => 'No professionals found'
+        ], 404);
     }
+
+    return response()->json([
+        'status' => true,
+        'professionals' => $professionals
+    ], 200);
+}
+
 }

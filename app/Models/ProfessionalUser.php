@@ -18,6 +18,7 @@ class ProfessionalUser extends Authenticatable
         'phone_number',
         'email',
         'password',
+        'grade',
     ];
 
     protected $hidden = [
