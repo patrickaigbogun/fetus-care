@@ -18,10 +18,14 @@ export default function WorkSchedule() {
 		new Set(appointments.map((a) => a.specialist))
 	);
 
-	const filteredProfessionals = allProfessionals.filter((professional) =>
-		professional.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+  const filteredProfessionals = allProfessionals.filter((professional) =>
+    professional.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
+  const appointmentTypes = selectedProfessional
+    ? appointments.find((a) => a.specialist === selectedProfessional)
+        ?.appointments || []
+    : [];
 
   return (
     <div className="max-w-screen-md w-full mx-auto p-6 space-y-6">
@@ -56,39 +60,6 @@ export default function WorkSchedule() {
           ))}
         </div>
       </div>
-
-	return (
-		<div className="max-w-4xl mx-auto p-6 space-y-6">
-			{/* Search Professionals */}
-			<div className="space-y-4">
-				<h2 className="text-xl font-semibold text-gray-800">
-					Select Professional
-				</h2>
-				<div className="relative">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-					<input
-						type="text"
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-						placeholder="Search professionals..."
-						className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-					/>
-				</div>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{filteredProfessionals.map((professional) => (
-						<button
-							key={professional}
-							onClick={() => setSelectedProfessional(professional)}
-							className={`p-4 rounded-lg border transition-all ${selectedProfessional === professional
-									? "border-blue-500 bg-blue-50"
-									: "hover:bg-gray-50"
-								}`}
-						>
-							<h3 className="font-medium text-gray-800">{professional}</h3>
-						</button>
-					))}
-				</div>
-			</div>
 
 			{/* Date Picker */}
 			<div className="space-y-4">
