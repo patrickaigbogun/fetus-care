@@ -21,13 +21,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import Cookies from "js-cookie";
 
 const sidebarStuff = [
-  {
-    icon: IconHomeFilled,
-    label: "Home",
-    href: "/dashboard",
-  },
   {
     icon: IconInbox,
     label: "Chat",
