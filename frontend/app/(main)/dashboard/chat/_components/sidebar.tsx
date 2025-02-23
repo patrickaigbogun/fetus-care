@@ -167,6 +167,8 @@ const ChatSidebar = () => {
           ))
         )}
       </div>
+
+      
     </div>
   );
 };

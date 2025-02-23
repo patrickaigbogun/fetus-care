@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { appointments } from "@/_mock/appointments";
 import { Search, Calendar, Edit } from "lucide-react";
+import { appointments } from "@/_mock_/appointments";
 
 export default function WorkSchedule() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,7 +28,7 @@ export default function WorkSchedule() {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-screen-md w-full mx-auto p-6 space-y-6">
       {/* Search Professionals */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-gray-800">

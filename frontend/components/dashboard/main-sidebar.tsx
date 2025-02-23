@@ -7,10 +7,20 @@ import {
   IconBrandItch,
   IconCalendar,
   IconCalendarFilled,
+  IconLogout,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/hooks/use-user";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const sidebarStuff = [
   {
@@ -43,6 +53,7 @@ const sidebarStuff = [
 const MainSidebar = () => {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { user } = useUser();
 
   return (
     <div
@@ -88,6 +99,37 @@ const MainSidebar = () => {
           </Link>
         ))}
       </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="rounded-full focus:outline-none">
+            <Image
+              src={
+                "https://images.unsplash.com/photo-1570158268183-d296b2892211?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YWZyaWNhbnxlbnwwfHwwfHx8MA%3D%3D"
+              }
+              alt="User Profile"
+              width={44}
+              height={44}
+              className="rounded-full aspect-square object-cover"
+            />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {user && (
+            <div className="px-2 py-1.5 text-sm">
+              <p className="font-medium">{user.username}</p>
+              <p className="text-muted-foreground">{user.email}</p>
+            </div>
+          )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <IconLogout className="mr-2 h-4 w-4" />
+            <span>Sign out</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
