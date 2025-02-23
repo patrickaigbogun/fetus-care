@@ -12,8 +12,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { List } from "@phosphor-icons/react";
-import { Flex, IconButton } from "@radix-ui/themes";
 import { useUser } from "@/hooks/use-user";
 import {
   DropdownMenu,
@@ -23,13 +21,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import Cookies from "js-cookie";
 
 const sidebarStuff = [
-  {
-    icon: IconHomeFilled,
-    label: "Home",
-    href: "/dashboard",
-  },
   {
     icon: IconInbox,
     label: "Chat",
@@ -126,9 +120,17 @@ const MainSidebar = () => {
             </div>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <IconLogout className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
+          <DropdownMenuItem asChild>
+            <button
+              onClick={() => {
+                Cookies.remove("token", { path: "/" });
+                Cookies.remove("user", { path: "/" });
+                window.location.href = "/";
+              }}
+            >
+              <IconLogout className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
