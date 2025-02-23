@@ -58,9 +58,9 @@ const ChatSidebar = () => {
                   <IconSquareRoundedPlusFilled width={28} />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className=" max-w-[400px] w-full bg-white rounded-3xl max-h-[40dvh]">
-                <div className="w-full flex flex-col gap-3">
-                  <h4 className="p-4 font-bold text-left ">Chat with</h4>
+              <DropdownMenuContent className=" max-w-[400px] w-full bg-white rounded-3xl max-h-[40dvh] overflow-y-scroll">
+                <h4 className="p-4 font-bold text-left sticky-0">Chat with</h4>
+                <div className="w-full flex flex-col gap-3 ">
                   {isPending ? (
                     <div className="p-16 flex align-middle place-items-center w-full">
                       <IconLoader size={24} className="animate-spin" />
@@ -167,8 +167,6 @@ const ChatSidebar = () => {
           ))
         )}
       </div>
-
-      
     </div>
   );
 };

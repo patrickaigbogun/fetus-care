@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 import { useUser } from "@/hooks/use-user";
 import {
   DropdownMenu,
@@ -124,9 +125,17 @@ const MainSidebar = () => {
             </div>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <IconLogout className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
+          <DropdownMenuItem asChild>
+            <button
+              onClick={() => {
+                Cookies.remove("token", { path: "/" });
+                Cookies.remove("user", { path: "/" });
+                window.location.href = "/";
+              }}
+            >
+              <IconLogout className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -12,7 +12,7 @@ import SendMessage from "./_components/send-message";
 const Chat = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const { chatId } = use(params);
 
-  const { messages, loading, sendMessage } = useActiveChat(chatId);
+  const { messages, sendMessage } = useActiveChat(chatId);
 
   // Example send usage
   const handleSend = async (text: string) => {
@@ -27,7 +27,6 @@ const Chat = ({ params }: { params: Promise<{ chatId: string }> }) => {
     isPending,
     data: chatInfo,
     isError,
-    error,
   } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
@@ -52,7 +51,6 @@ const Chat = ({ params }: { params: Promise<{ chatId: string }> }) => {
     );
 
   if (isError) {
-    console.log("ERROR FETCHING CHAT", error);
     return <div>Something happened</div>;
   }
 
