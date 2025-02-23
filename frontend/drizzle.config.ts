@@ -4,8 +4,7 @@ import { supabase, neonDbUrl } from "./env.config";
 export default {
   schema: "./db/schema.ts",
   dialect: "postgresql",
-  out: "./db/generated",
   dbCredentials: {
-    url: neonDbUrl.apiKey,
+    url: supabase.connection_url,
   },
 } satisfies Config;

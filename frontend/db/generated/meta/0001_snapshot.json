@@ -1,6 +1,6 @@
 {
-  "id": "b1b91fd6-0c86-4179-8f87-57c5d0b47921",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a53ef7f3-a897-447d-9d59-9fd7324e1f16",
+  "prevId": "fc2da33d-10ca-48de-9fb6-5d1987e41ee8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -34,6 +34,24 @@
           "primaryKey": false,
           "notNull": true
         },
+        "professional_name": {
+          "name": "professional_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "professional_phone_number": {
+          "name": "professional_phone_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "professional_image": {
+          "name": "professional_image",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
         "last_message_id": {
           "name": "last_message_id",
           "type": "uuid",
@@ -43,19 +61,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "chats_professional_id_professionals_id_fk": {
-          "name": "chats_professional_id_professionals_id_fk",
-          "tableFrom": "chats",
-          "tableTo": "professionals",
-          "columnsFrom": [
-            "professional_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
         "chats_last_message_id_messages_id_fk": {
           "name": "chats_last_message_id_messages_id_fk",
           "tableFrom": "chats",
@@ -172,63 +177,6 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.professionals": {
-      "name": "professionals",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "avatar": {
-          "name": "avatar",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "field": {
-          "name": "field",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "phone_number": {
-          "name": "phone_number",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "professionals_email_unique": {
-          "name": "professionals_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

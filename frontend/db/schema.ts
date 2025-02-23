@@ -8,15 +8,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 
-export const professionals = pgTable("professionals", {
-  id: varchar("id").primaryKey(),
-  name: text("name").notNull(),
-  avatar: text("avatar"),
-  field: text("field").notNull(),
-  phone_number: text("phone_number").notNull(),
-  email: text("email").notNull().unique(),
-});
-
 export const messages = pgTable("messages", {
   id: uuid("id").primaryKey().defaultRandom(),
   sent_by: varchar("sent_by").notNull(),
@@ -40,22 +31,14 @@ export const chats = pgTable("chats", {
   id: uuid("id").primaryKey().defaultRandom(),
   created_at: timestamp("created_at").defaultNow().notNull(),
   creator_id: varchar("creator_id").notNull(),
-  professional_id: varchar("professional_id")
-    .notNull()
-    .references(() => professionals.id),
+  professional_id: varchar("professional_id").notNull(),
+  professional_name: varchar("professional_name").notNull(),
+  professional_phone_number: varchar("professional_phone_number").notNull(),
+  professional_image: varchar("professional_image").notNull(),
   last_message_id: uuid("last_message_id").references(() => messages.id),
 });
 
-// Relationships
-export const professionalsRelations = relations(professionals, ({ many }) => ({
-  chats: many(chats),
-}));
-
-export const chatsRelations = relations(chats, ({ one, many }) => ({
-  professional: one(professionals, {
-    fields: [chats.professional_id],
-    references: [professionals.id],
-  }),
+export const chatsRelations = relations(chats, ({ many, one }) => ({
   messages: many(messages),
   lastMessage: one(messages, {
     fields: [chats.last_message_id],
@@ -70,10 +53,6 @@ export const messagesRelations = relations(messages, ({ one }) => ({
   }),
 }));
 
-export type Professional = InferSelectModel<typeof professionals>;
-export type NewProfessional = InferInsertModel<typeof professionals>;
-export type ProfessionalWithRelations = Professional & { chats: Chat[] };
-
 export type Message = InferSelectModel<typeof messages>;
 export type NewMessage = InferInsertModel<typeof messages>;
 export type MessageWithRelations = Message & { chat: Chat };
@@ -81,7 +60,6 @@ export type MessageWithRelations = Message & { chat: Chat };
 export type Chat = InferSelectModel<typeof chats>;
 export type NewChat = InferInsertModel<typeof chats>;
 export type ChatWithRelations = Chat & {
-  professional: Professional;
   messages: Message[];
   lastMessage: Message;
 };

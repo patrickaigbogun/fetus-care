@@ -1,0 +1,1 @@
+ALTER TABLE "chats" ADD COLUMN "professional_image" varchar NOT NULL;

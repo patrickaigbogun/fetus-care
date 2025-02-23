@@ -3,6 +3,8 @@ CREATE TABLE "chats" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"creator_id" varchar NOT NULL,
 	"professional_id" varchar NOT NULL,
+	"professional_name" varchar NOT NULL,
+	"professional_phone_number" varchar NOT NULL,
 	"last_message_id" uuid
 );
 --> statement-breakpoint
@@ -23,15 +25,4 @@ CREATE TABLE "messages" (
 	"chat_id" uuid NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "professionals" (
-	"id" varchar PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"avatar" text,
-	"field" text NOT NULL,
-	"phone_number" text NOT NULL,
-	"email" text NOT NULL,
-	CONSTRAINT "professionals_email_unique" UNIQUE("email")
-);
---> statement-breakpoint
-ALTER TABLE "chats" ADD CONSTRAINT "chats_professional_id_professionals_id_fk" FOREIGN KEY ("professional_id") REFERENCES "public"."professionals"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "chats" ADD CONSTRAINT "chats_last_message_id_messages_id_fk" FOREIGN KEY ("last_message_id") REFERENCES "public"."messages"("id") ON DELETE no action ON UPDATE no action;

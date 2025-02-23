@@ -1,19 +1,12 @@
 import { useState, useEffect } from "react";
-import type { Chat } from "@/types/chats";
 import { liveSupabase } from "@/supabase/client";
 import { v4 } from "uuid";
 import { useRouter } from "next/navigation";
 import { useUser } from "./use-user";
+import { Chat, ChatWithRelations, NewChat } from "@/db/schema";
 
-interface UseChatsReturn {
-  chats: Chat[];
-  loading: boolean;
-  error: string | null;
-  createChat: () => Promise<void>;
-}
-
-export const useChats = (): UseChatsReturn => {
-  const [chats, setChats] = useState<Chat[]>([]);
+export const useChats = () => {
+  const [chats, setChats] = useState<ChatWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -34,7 +27,6 @@ export const useChats = (): UseChatsReturn => {
           .select(
             `
             *,
-            professional:professionals(*),
             lastMessage:messages!last_message_id(*)
           `
           )
@@ -42,6 +34,11 @@ export const useChats = (): UseChatsReturn => {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
+        if (!data) {
+          setChats([]);
+          setError("No chats found");
+          return;
+        }
         setChats(data || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch chats");
@@ -150,17 +147,27 @@ export const useChats = (): UseChatsReturn => {
     };
   }, [user]);
 
-  const createChat = async () => {
+  const createChat = async (professional: {
+    id: string;
+    name: string;
+    image: string;
+    phone_number: string;
+  }) => {
     if (!user) return;
 
     try {
-      const newChat = {
-        professional_id: "2",
-        creator_id: user.id,
+      const newChat: NewChat = {
+        professional_id: professional.id,
+        professional_name: professional.name,
+        professional_phone_number: professional.phone_number,
+        professional_image:
+          professional.image ??
+          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
+        creator_id: `${user.id}`,
         id: v4(),
       };
-      
-      
+
+      console.log("NEW", newChat);
 
       const { error } = await liveSupabase
         .from("chats")

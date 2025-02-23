@@ -1,207 +1,118 @@
-// get professors and display to be selected by users
-// date of appointment
-// type of appointment: consultation, exam, counceling
-// notes
-
-
-
-
 "use client";
 
 import { useState } from "react";
-import { Copy, Trash, X } from "lucide-react";
+import { appointments } from "@/_mock/appointments";
+import { Search, Calendar, Edit } from "lucide-react";
 
 export default function WorkSchedule() {
-  const [selectedDays, setSelectedDays] = useState<string[]>([
-    "Mo",
-    "Tu",
-    "We",
-    "Th",
-    "Fr",
-  ]);
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("18:00");
-  const [breakType, setBreakType] = useState<"Fixed" | "Flexible">("Flexible");
-  const [breakDuration, setBreakDuration] = useState("01:00");
-  const [isDefineBreaks, setIsDefineBreaks] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [notes, setNotes] = useState("");
+  const [selectedProfessional, setSelectedProfessional] = useState<
+    string | null
+  >(null);
 
-  const days = [
-    { short: "Mo", long: "Monday" },
-    { short: "Tu", long: "Tuesday" },
-    { short: "We", long: "Wednesday" },
-    { short: "Th", long: "Thursday" },
-    { short: "Fr", long: "Friday" },
-    { short: "Sa", long: "Saturday" },
-    { short: "Su", long: "Sunday" },
-  ];
+  // Flatten the appointments data for easier filtering
+  const allProfessionals = Array.from(
+    new Set(appointments.map((a) => a.specialist))
+  );
 
-  const toggleDay = (day: string) => {
-    if (selectedDays.includes(day)) {
-      setSelectedDays(selectedDays.filter((d) => d !== day));
-    } else {
-      setSelectedDays([...selectedDays, day]);
-    }
-  };
+  const filteredProfessionals = allProfessionals.filter((professional) =>
+    professional.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const calculateTotalHours = () => {
-    const start = startTime.split(":").map(Number);
-    const end = endTime.split(":").map(Number);
-    const break_ = breakDuration.split(":").map(Number);
-
-    const totalMinutes =
-      end[0] * 60 +
-      end[1] -
-      (start[0] * 60 + start[1]) -
-      (break_[0] * 60 + break_[1]);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
-  };
+  const appointmentTypes = selectedProfessional
+    ? appointments.find((a) => a.specialist === selectedProfessional)
+        ?.appointments || []
+    : [];
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Search Professionals */}
       <div className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">
-            Working days
+        <h2 className="text-xl font-semibold text-gray-800">
+          Select Professional
+        </h2>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search professionals..."
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredProfessionals.map((professional) => (
+            <button
+              key={professional}
+              onClick={() => setSelectedProfessional(professional)}
+              className={`p-4 rounded-lg border transition-all ${
+                selectedProfessional === professional
+                  ? "border-blue-500 bg-blue-50"
+                  : "hover:bg-gray-50"
+              }`}
+            >
+              <h3 className="font-medium text-gray-800">{professional}</h3>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Date Picker */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Select Date</h2>
+        <div className="relative">
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="date"
+            value={selectedDate?.toISOString().split("T")[0] || ""}
+            onChange={(e) => setSelectedDate(new Date(e.target.value))}
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
+      {/* Appointment Type */}
+      {selectedProfessional && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Select Appointment Type
           </h2>
-          <p className="text-gray-600 mb-4">
-            Select the working days of the week in this work schedule.
-          </p>
-          <div className="flex gap-2">
-            {days.map((day) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {appointmentTypes.map((type) => (
               <button
-                key={day.short}
-                onClick={() => toggleDay(day.short)}
-                className={`w-12 h-12 rounded-lg font-medium transition-colors
-                  ${
-                    selectedDays.includes(day.short)
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 border"
-                  }`}
+                key={type.type}
+                onClick={() => setSelectedType(type.type)}
+                className={`p-4 rounded-lg border transition-all ${
+                  selectedType === type.type
+                    ? "border-blue-500 bg-blue-50"
+                    : "hover:bg-gray-50"
+                }`}
               >
-                {day.short}
+                <h3 className="font-medium text-gray-800">{type.type}</h3>
+                <p className="text-sm text-gray-600 mt-1">{type.description}</p>
               </button>
             ))}
           </div>
         </div>
+      )}
 
-        <div className="bg-white rounded-lg border p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-800">Monday</h3>
-            <button className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700">
-              <Copy className="w-4 h-4" />
-              <span>Copy to all</span>
-            </button>
-          </div>
-
-          <div>
-            <h4 className="text-gray-700 mb-2">Working hours</h4>
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="w-32 px-3 py-2 border rounded-lg pr-8"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <span className="text-gray-600">to</span>
-              <div className="relative">
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-32 px-3 py-2 border rounded-lg pr-8"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <button className="text-gray-400 hover:text-gray-600">
-                <Trash className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          <button className="text-emerald-600 hover:text-emerald-700 font-medium">
-            + Add new
-          </button>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer
-                  ${isDefineBreaks ? "bg-emerald-500" : "bg-gray-200"}`}
-                onClick={() => setIsDefineBreaks(!isDefineBreaks)}
-              >
-                <div
-                  className={`absolute w-5 h-5 rounded-full bg-white top-0.5 transition-all
-                    ${isDefineBreaks ? "left-[22px]" : "left-0.5"}`}
-                />
-              </div>
-              <span className="font-medium text-gray-700">
-                Define work breaks
-              </span>
-            </div>
-
-            {isDefineBreaks && (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-gray-700 mb-2">Work breaks are</p>
-                  <div className="inline-flex rounded-lg border p-1">
-                    {["Fixed", "Flexible"].map((type) => (
-                      <button
-                        key={type}
-                        onClick={() =>
-                          setBreakType(type as "Fixed" | "Flexible")
-                        }
-                        className={`px-4 py-1 rounded-md transition-colors
-                          ${
-                            breakType === type
-                              ? "bg-emerald-100 text-emerald-600"
-                              : "text-gray-600"
-                          }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-gray-700 mb-2">Break duration</p>
-                  <div className="relative">
-                    <input
-                      type="time"
-                      value={breakDuration}
-                      onChange={(e) => setBreakDuration(e.target.value)}
-                      className="w-32 px-3 py-2 border rounded-lg pr-8"
-                    />
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="pt-4 border-t">
-            <p className="text-gray-600">
-              Total working hours:{" "}
-              <span className="font-medium">{calculateTotalHours()}</span>
-            </p>
-          </div>
+      {/* Notes */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Add Notes</h2>
+        <div className="relative">
+          <Edit className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Add any additional notes..."
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[120px]"
+          />
         </div>
       </div>
     </div>
   );
 }
-

@@ -38,7 +38,6 @@ export const supabase = {
 export const agora = {
   appId: getEnvironmentVariable("NEXT_PUBLIC_AGORA_APP_ID"),
   token: getEnvironmentVariable("NEXT_PUBLIC_AGORA_TEMP_TOKEN"),
-//   channel: getEnvironmentVariable("CHANNEL"),
 };
 
 export const backendApi = {

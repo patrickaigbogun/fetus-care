@@ -1,4 +1,3 @@
-import { Professional } from "@/db/schema";
 import {
   IconDotsVertical,
   IconPhoneCall,
@@ -7,7 +6,12 @@ import {
 import React from "react";
 
 type Props = {
-  professional: Professional;
+  professional: {
+    id: string;
+    name: string;
+    image: string;
+    phone_number: string;
+  };
 };
 
 const ChatNavbar = ({ professional }: Props) => {

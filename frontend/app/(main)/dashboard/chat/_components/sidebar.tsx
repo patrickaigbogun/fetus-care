@@ -1,5 +1,4 @@
 "use client";
-import { Chat } from "@/types/chats";
 import { Button } from "@radix-ui/themes";
 import {
   IconInbox,
@@ -47,7 +46,6 @@ const ChatSidebar = () => {
     },
   });
 
-  console.log("PROFESSIONALS", professionals)
   return (
     <div className="w-[40%] border-r bg-purple-100/60 sticky top-0 z-10 dflex flex-col gap-2 h-screen overflow-y-scroll">
       <div className="flex flex-col gap-2 sticky top-0 bg-white p-4">
@@ -60,8 +58,8 @@ const ChatSidebar = () => {
                   <IconSquareRoundedPlusFilled width={28} />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className=" max-w-[300px] w-full bg-white rounded-3xl max-h-[40dvh]">
-                <div className="w-full flex flex-col gap-6">
+              <DropdownMenuContent className=" max-w-[400px] w-full bg-white rounded-3xl max-h-[40dvh]">
+                <div className="w-full flex flex-col gap-3">
                   <h4 className="p-4 font-bold text-left ">Chat with</h4>
                   {isPending ? (
                     <div className="p-16 flex align-middle place-items-center w-full">
@@ -74,9 +72,24 @@ const ChatSidebar = () => {
                           return (
                             <button
                               key={professional.id}
-                              className="p-2 px-4 rounded-2xl w-full hover:bg-purple-100"
-                              onClick={async () => await createChat()}
+                              className="p-2 px-4 rounded-2xl w-full flex align-middle place-items-center justify-start gap-2 hover:bg-purple-100"
+                              onClick={async () => {
+                                await createChat({
+                                  id: professional.id,
+                                  name: professional.name,
+                                  image: professional.avatar,
+                                  phone_number: professional.phone_number,
+                                });
+                                console.log(professional);
+                              }}
                             >
+                              <Image
+                                src={"/logo.svg"}
+                                alt="Logo"
+                                width={24}
+                                height={24}
+                                className="rounded-full border"
+                              />
 
                               {professional.name}
                             </button>
@@ -131,21 +144,23 @@ const ChatSidebar = () => {
               className="w-full p-3 text-sm hover:bg-purple-200/60 transition-colors rounded-2xl flex items-center gap-3"
             >
               <Image
-                src={chat.professional.avatar || "/logo.svg"}
-                alt={`${chat.professional.name}'s avatar`}
-                width={30}
-                height={30}
-                className="rounded-full"
+                src={chat.professional_image || "/logo.svg"}
+                alt={`${chat.professional_name}'s avatar`}
+                width={44}
+                height={44}
+                className="rounded-full aspect-square object-cover"
               />
               <div className="flex flex-col items-start gap-1 flex-1 overflow-hidden">
-                <h4 className="font-semibold">{chat.professional.name}</h4>
+                <h4 className="font-semibold">{chat.professional_name}</h4>
                 <p className="text-gray-600 text-xs truncate w-full">
-                  {chat.content?.lastMessage?.text || "No messages yet"}
+                  {chat.lastMessage?.text || "No messages yet"}
                 </p>
               </div>
               <span className="text-xs text-gray-500">
-                {chat.content?.lastMessage
-                  ? formatMessageTime(chat.content?.lastMessage.createdAt)
+                {chat.lastMessage
+                  ? formatMessageTime(
+                      `${new Date(chat.lastMessage.created_at).toISOString()}`
+                    )
                   : ""}
               </span>
             </Link>

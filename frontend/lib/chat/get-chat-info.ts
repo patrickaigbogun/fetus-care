@@ -4,13 +4,7 @@ import { liveSupabase } from "@/supabase/client";
 export const getChatInfo = async (chatId: string) => {
   const { data, error } = await liveSupabase
     .from("chats")
-    .select(
-      `
-      *,
-      professional:professionals(*),
-      lastMessage:messages!last_message_id(*)
-    `
-    )
+    .select("*")
     .eq("id", chatId)
     .single();
 

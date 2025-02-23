@@ -22,6 +22,8 @@ export const useActiveChat = (chatId: string) => {
           .eq("id", chatId)
           .single();
 
+        console.log("INITIAL CCHAT SATA", chatData);
+
         if (chatError) throw chatError;
         setChatInfo(chatData);
 
