@@ -1,0 +1,1 @@
+folder for the fastapi server that holds the ai and other smart things
