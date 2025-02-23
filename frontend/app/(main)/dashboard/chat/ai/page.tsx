@@ -53,8 +53,8 @@ const ChatInterface = () => {
 	}, [messages]);
 
 	return (
-		<div className="flex flex-col h-screen bg-black text-white">
-			<Card className="flex-1 overflow-y-auto p-4 backdrop-blur-lg bg-white/10">
+		<div className="flex flex-col h-screen relative text- w-full">
+			<Card className="flex-1 overflow-y-auto p-4 ">
 				{messages.map((msg, idx) => (
 					<div
 						key={idx}
@@ -65,13 +65,13 @@ const ChatInterface = () => {
 				))}
 				<div ref={chatEndRef} />
 			</Card>
-			<div className="p-4 flex items-center gap-2 backdrop-blur-lg bg-white/10">
+			<div className="flex items-center gap-2">
 				<TextArea
 					variant='soft'
 					placeholder="Type your message..."
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					className="flex-1 text-black"
+					className="flex-1 text-white"
 					disabled={isStreaming}
 				/>
 				<Button variant='soft' onClick={handleSendMessage} disabled={isStreaming || !input.trim()}>
