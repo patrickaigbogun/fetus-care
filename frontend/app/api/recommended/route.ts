@@ -21,11 +21,11 @@ export async function POST(req: Request) {
 
         // Ask Meditron for a severity score (1-10)
         const prompt = `On a scale of 1 to 10, how severe are the following symptoms? Return only a number. Symptoms: ${symptoms}`;
-        
+
         const response = await fetch(OLLAMA_API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ model: "meditron", prompt }),
+            body: JSON.stringify({ model: "meditron:7b", prompt }),
         });
 
         const data = await response.json();
@@ -38,19 +38,22 @@ export async function POST(req: Request) {
 
         const grade = mapSeverityToGrade(score);
 
-        // Fetch professionals that match the severity grade
-        const professionals = await fetch(ENDPOINTS.GET_ALL_PROFESSIONALS,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ model: "meditron", prompt }),
-            }
-        );
+        // Fetch professionals from the external API
+        const professionalsResponse = await fetch(ENDPOINTS.GET_ALL_PROFESSIONALS, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const professionalsData = await professionalsResponse.json();
+        const professionals = professionalsData?.professionals || [];
+
+        // Filter professionals based on grade and recommend the first three
+        const recommendedProfessionals = professionals.filter((prof: any) => prof.grade === grade).slice(0, 3);
 
         return NextResponse.json({
             severity_score: score,
             mapped_grade: grade,
-            recommended_professionals: professionals,
+            recommended_professionals: recommendedProfessionals,
         });
 
     } catch (error) {

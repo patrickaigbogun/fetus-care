@@ -3,7 +3,7 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import QueryProvider from "@/components/query-provider";
-import { ClerkProvider } from "@clerk/nextjs";
+// import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
