@@ -115,20 +115,22 @@ class ProfessionalAuthController extends Controller
      * Get all professionals and their fields
      */
     public function index()
-{
-    $professionals = ProfessionalUser::all(); // Fetch all fields
-
-    if ($professionals->isEmpty()) {
+    {
+        // Ensure only professional users are retrieved
+        $professionals = ProfessionalUser::whereNotNull('professional_id')->get();
+    
+        if ($professionals->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No professionals found'
+            ], 404);
+        }
+    
         return response()->json([
-            'status' => false,
-            'message' => 'No professionals found'
-        ], 404);
+            'status' => true,
+            'professionals' => $professionals
+        ], 200);
     }
-
-    return response()->json([
-        'status' => true,
-        'professionals' => $professionals
-    ], 200);
-}
+    
 
 }
