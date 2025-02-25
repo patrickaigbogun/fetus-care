@@ -1,0 +1,32 @@
+# Binaries & executables
+/tmp/
+*.exe
+*.out
+*.test
+*.dll
+*.so
+*.dylib
+
+# Dependency files
+vendor/
+go.sum
+
+# Logs & temp files
+logs/
+*.log
+*.cache
+
+# Environment variables
+.env
+
+# IDE & editor files
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts
+*.o
+*.a
+
+# Air live reload tool
+.air.toml
