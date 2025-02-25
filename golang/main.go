@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	port := "8080"
+	port := "7000"
 	// Initialize database
 	db.Connect()
 
