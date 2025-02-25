@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+.env
+*.pyc
+__pycache__/
+
+# Dependency files
+*.lock
+poetry.lock
+
+# Logs & temp files
+logs/
+*.log
+*.cache
+
+# IDE & editor files
+.vscode/
+.idea/
+*.swp
