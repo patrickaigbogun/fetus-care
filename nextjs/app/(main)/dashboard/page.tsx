@@ -31,7 +31,7 @@ const sidebarStuff = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {sidebarStuff.map((item, index) => (
           <Link key={index} href={item.href} className="block">
