@@ -1,0 +1,10 @@
+{
+  "name": "multi-server-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter ./nextjs dev\" \"cd ./api && poetry run uvicorn main:app --reload\" \"go run ./golang/main.go\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
