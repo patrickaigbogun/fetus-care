@@ -2,9 +2,10 @@
   "name": "multi-server-app",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter ./nextjs dev\" \"cd ./api && poetry run uvicorn main:app --reload\" \"go run ./golang/main.go\""
+    "dev": "concurrently \"pnpm --filter ./nextjs dev\" \"cd ./api && poetry run uvicorn main:app --reload\" \"cd golang && air -c .air.toml\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.0"
   }
 }

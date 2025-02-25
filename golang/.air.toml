@@ -1,0 +1,17 @@
+# Configuration for Air - Live reload for Golang
+
+root = "."  # Only watch files inside /golang
+tmp_dir = "tmp"  # Temporary directory for builds
+
+[build]
+  cmd = "go build -o tmp/main.exe ."  # Ensure output is an .exe file
+  bin = "tmp/main.exe"
+  exclude_dir = ["../"]  # Exclude everything outside /golang
+  delay = 1000  # Delay rebuild (in ms)
+
+[log]
+  level = "debug"
+
+[watcher]
+  include_ext = ["go", "tpl", "tmpl", "html"]  # Only watch necessary files
+  exclude_dir = ["tmp", "node_modules", "nextjs", "api"]  # Exclude unnecessary directories
